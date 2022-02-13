@@ -84,7 +84,3 @@ export class BluetoothSerialWeb extends WebPlugin implements BluetoothSerialPlug
   }
 
 }
-
-const BluetoothSerial = new BluetoothSerialWeb();
-
-export { BluetoothSerial };
