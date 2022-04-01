@@ -256,7 +256,7 @@ public class BluetoothSerial extends Plugin {
             String value = getService().read(address);
 
             JSObject response = new JSObject();
-            response.put("value", value);
+            response.put("data", value);
 
             resolveCall(call, response);
         } catch (IOException e) {
@@ -280,7 +280,7 @@ public class BluetoothSerial extends Plugin {
             String value = getService().readUntil(address, delimiter);
 
             JSObject response = new JSObject();
-            response.put("value", value);
+            response.put("data", value);
 
             resolveCall(call, response);
         } catch (IOException e) {
