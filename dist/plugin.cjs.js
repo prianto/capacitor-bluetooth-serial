@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var core = require('@capacitor/core');
 
-const BluetoothSerial$1 = core.registerPlugin('BluetoothSerial', {
+const BluetoothSerial = core.registerPlugin('BluetoothSerial', {
     web: () => Promise.resolve().then(function () { return web; }).then(m => new m.BluetoothSerialWeb()),
 });
 
@@ -79,13 +79,11 @@ class BluetoothSerialWeb extends core.WebPlugin {
         throw new Error('Method not implemented.');
     }
 }
-const BluetoothSerial = new BluetoothSerialWeb();
 
 var web = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    BluetoothSerialWeb: BluetoothSerialWeb,
-    BluetoothSerial: BluetoothSerial
+    BluetoothSerialWeb: BluetoothSerialWeb
 });
 
-exports.BluetoothSerial = BluetoothSerial$1;
+exports.BluetoothSerial = BluetoothSerial;
 //# sourceMappingURL=plugin.cjs.js.map

@@ -65,6 +65,4 @@ export class BluetoothSerialWeb extends WebPlugin {
         throw new Error('Method not implemented.');
     }
 }
-const BluetoothSerial = new BluetoothSerialWeb();
-export { BluetoothSerial };
 //# sourceMappingURL=web.js.map

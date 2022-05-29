@@ -14,5 +14,3 @@ export declare class BluetoothSerialWeb extends WebPlugin implements BluetoothSe
     enableNotifications(options: BluetoothEnableNotificationsOptions): Promise<BluetoothEnableNotificationsResult>;
     disableNotifications(options: BluetoothDisableNotificationsOptions): Promise<void>;
 }
-declare const BluetoothSerial: BluetoothSerialWeb;
-export { BluetoothSerial };

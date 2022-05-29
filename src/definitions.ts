@@ -1,4 +1,5 @@
-export interface BluetoothSerialPlugin {
+import { Plugin } from '@capacitor/core';
+export interface BluetoothSerialPlugin extends Plugin {
 
   isEnabled(): Promise<BluetoothEnabledResult>;
 
