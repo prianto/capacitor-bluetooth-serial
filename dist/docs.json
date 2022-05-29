@@ -403,6 +403,13 @@
           "docs": "",
           "complexTypes": [],
           "type": "string"
+        },
+        {
+          "name": "charset",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
         }
       ]
     },

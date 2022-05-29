@@ -7,5 +7,6 @@ public class KeyConstants {
     public static final String ADDRESS_UUID = "address";
     public static final String DELIMITER = "delimiter";
     public static final String VALUE = "value";
+    public static final String CHARSET = "charset";
 
 }

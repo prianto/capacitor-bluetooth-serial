@@ -468,6 +468,7 @@ Function `write` writes data to the buffer.
 
 - { __address__ }: Identifier of the remote device.
 - { __value__ }: String to send.
+- { __charset__ }: Charset of the string (Optional, default: UTF-8).
 
 ### Quick Example
 

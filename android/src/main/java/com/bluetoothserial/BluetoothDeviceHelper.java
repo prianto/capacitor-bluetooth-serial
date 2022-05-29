@@ -6,7 +6,7 @@ import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Set;
 
 public class BluetoothDeviceHelper implements Serializable {
@@ -32,12 +32,12 @@ public class BluetoothDeviceHelper implements Serializable {
         return json;
     }
 
-    public static byte[] toByteArray(String value) {
+    public static byte[] toByteArray(String value, String charsetName) {
         if (value == null) {
             return new byte[0];
         }
 
-        return value.getBytes(StandardCharsets.UTF_8);
+        return value.getBytes(Charset.forName(charsetName));
     }
 
 }

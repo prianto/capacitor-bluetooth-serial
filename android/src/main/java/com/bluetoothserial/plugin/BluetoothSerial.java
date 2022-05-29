@@ -232,9 +232,14 @@ public class BluetoothSerial extends Plugin {
         }
 
         String value = call.getString(KeyConstants.VALUE);
-        Log.i(getLogTag(), value);
+        //Log.i(getLogTag(), value);
 
-        boolean success = getService().write(address, BluetoothDeviceHelper.toByteArray(value));
+        String charsetName = call.getString(KeyConstants.CHARSET);
+        if (charsetName == null) {
+            charsetName = "UTF-8";
+        }
+
+        boolean success = getService().write(address, BluetoothDeviceHelper.toByteArray(value, charsetName));
 
         if(success) {
             resolveCall(call);

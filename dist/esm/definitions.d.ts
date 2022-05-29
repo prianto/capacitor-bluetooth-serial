@@ -49,6 +49,7 @@ export interface BluetoothReadUntilOptions {
 export interface BluetoothWriteOptions {
     address: string;
     value: string;
+    charset?: string;
 }
 export interface BluetoothEnableNotificationsOptions {
     address: string;
