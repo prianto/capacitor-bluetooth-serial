@@ -352,10 +352,11 @@ public class BluetoothSerial extends Plugin {
     @Override
     protected void handleOnStop() {
         super.handleOnStop();
-
+        /* Disconnects Bluetooth devices when the app goes to the background
         if(service != null) {
             getService().stopAll();
         }
+        */
     }
 
     @Override
