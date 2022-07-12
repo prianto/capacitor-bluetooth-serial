@@ -2,6 +2,7 @@ package com.bluetoothserial.plugin;
 
 import android.Manifest;
 import android.app.Activity;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -18,7 +19,10 @@ import com.bluetoothserial.BluetoothSerialService;
 import com.bluetoothserial.KeyConstants;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -27,21 +31,17 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-@NativePlugin(
+@CapacitorPlugin(
         permissions = {
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN
-        },
-        requestCodes = {
-          BluetoothSerial.REQUEST_ENABLE_BT
+            @Permission(strings = { Manifest.permission.ACCESS_COARSE_LOCATION }, alias = "ACCESS_COARSE_LOCATION"),
+            @Permission(strings = { Manifest.permission.ACCESS_FINE_LOCATION }, alias = "ACCESS_FINE_LOCATION"),
+            @Permission(strings = { Manifest.permission.BLUETOOTH }, alias = "BLUETOOTH"),
+            @Permission(strings = { Manifest.permission.BLUETOOTH_ADMIN }, alias = "BLUETOOTH_ADMIN"),
+            @Permission(strings = { "android.permission.BLUETOOTH_SCAN" }, alias = "BLUETOOTH_SCAN"),
+            @Permission(strings = { "android.permission.BLUETOOTH_CONNECT" }, alias = "BLUETOOTH_CONNECT"),
         }
 )
 public class BluetoothSerial extends Plugin {
-
-    static final int REQUEST_ENABLE_BT = 1245;
-
     private static final String ERROR_ADDRESS_MISSING = "Propriedade endereço do dispositivo é obrigatória.";
     private static final String ERROR_DEVICE_NOT_FOUND = "Dispositivo não encontrado.";
     private static final String ERROR_CONNECTION_FAILED = "Falha ao conectar ao dispositivo.";
@@ -51,6 +51,21 @@ public class BluetoothSerial extends Plugin {
     private BluetoothAdapter bluetoothAdapter;
 
     private BluetoothSerialService service;
+
+    private String[] getPermissionAliases() {
+      if (android.os.Build.VERSION.SDK_INT >= 31) {
+            return new String[]{"ACCESS_FINE_LOCATION",
+                                "BLUETOOTH_SCAN",
+                                "BLUETOOTH_CONNECT"
+            };
+          } else {
+            return new String[]{"ACCESS_COARSE_LOCATION",
+                                "ACCESS_FINE_LOCATION",
+                                "BLUETOOTH",
+                                "BLUETOOTH_ADMIN"
+            };
+      }
+    }
 
     private void unregisterReceiver(BroadcastReceiver receiver) {
         getContext().unregisterReceiver(receiver);
@@ -95,18 +110,12 @@ public class BluetoothSerial extends Plugin {
     @PluginMethod()
     public void isEnabled(PluginCall call) {
         boolean enabled = isEnabled();
-
         resolveEnableBluetooth(call, enabled);
     }
 
     @PluginMethod()
     public void enable(PluginCall call) {
-      if (!hasRequiredPermissions()) {
-        saveCall(call);
-        pluginRequestAllPermissions();
-      } else {
-        enableBluetooth(call);
-      }
+      enableBluetooth(call);
     }
 
     @PluginMethod()
@@ -147,6 +156,9 @@ public class BluetoothSerial extends Plugin {
 
     @PluginMethod()
     public void connect(PluginCall call) {
+        if(!isEnabled()) {
+            enableBluetooth(call);
+        }
         String address = getAddress(call);
 
         if (address == null) {
@@ -359,52 +371,9 @@ public class BluetoothSerial extends Plugin {
         */
     }
 
-    @Override
-    protected void handleRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.handleRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        Log.d(getLogTag(), "handling request perms result");
-        PluginCall savedCall = getSavedCall();
-        if (savedCall == null) {
-            Log.d(getLogTag(), "No stored plugin call for permissions request result");
-            return;
-        }
-
-        for(int result : grantResults) {
-            if (result == PackageManager.PERMISSION_DENIED) {
-                Log.e(getLogTag(), "User denied permission");
-                savedCall.error("Permissão negada");
-
-                freeSavedCall();
-                return;
-            }
-        }
-
-        Log.d(getLogTag(), "Permissions acquired");
-
-        enableBluetooth(savedCall);
-    }
-
-    @Override
-    protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-      super.handleOnActivityResult(requestCode, resultCode, data);
-
-      Log.i(getLogTag(), "Handler called with " + resultCode);
-
-      if (requestCode == REQUEST_ENABLE_BT) {
-        PluginCall call = getSavedCall();
-
-        if (call == null) {
-          return;
-        }
-
-        resolveEnableBluetooth(call, resultCode == Activity.RESULT_OK);
-        freeSavedCall();
-      }
-    }
-
     private void enableBluetooth(PluginCall call) {
       if(!hasRequiredPermissions()) {
+        requestPermissionForAliases(getPermissionAliases(), call, "checkPermission");
         resolveEnableBluetooth(call, false);
         return;
       }
@@ -413,16 +382,15 @@ public class BluetoothSerial extends Plugin {
         return;
       }
 
-      Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-      startActivityForResult(call, enableIntent, REQUEST_ENABLE_BT);
+
     }
 
-  private void resolveEnableBluetooth(PluginCall call, boolean enabled) {
-    JSObject ret = new JSObject();
-    ret.put(KeyConstants.ENABLED, enabled);
+    private void resolveEnableBluetooth(PluginCall call, boolean enabled) {
+      JSObject ret = new JSObject();
+      ret.put(KeyConstants.ENABLED, enabled);
 
-    resolveCall(call, ret);
-  }
+      resolveCall(call, ret);
+    }
 
     private void resolveCall(PluginCall call, JSObject ret) {
       call.resolve(ret);
@@ -456,6 +424,18 @@ public class BluetoothSerial extends Plugin {
       }
 
       return false;
+    }
+
+    @Override
+    public boolean hasRequiredPermissions() {
+        for(String alias : getPermissionAliases()) {
+            if (getPermissionState(alias) != PermissionState.GRANTED) {
+              Log.e(getLogTag(), "Permission not granted: " + alias);
+
+              return false;
+            }
+        }
+        return true;
     }
 
     private boolean isDisabled() {
