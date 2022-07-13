@@ -1,6 +1,6 @@
 # Capacitor Bluetooth Serial Plugin
 
-A client implementation for interacting with Bluetooth
+A client implementation for interacting with Bluetooth that WILL CONNECT Android to Android
 
 Supported platforms
 
@@ -11,7 +11,8 @@ Supported platforms
 ## Usage
 
 Install the plugin via npm
-```
+
+```bash
 npm install --save capacitor-bluetooth-serial
 ```
 
@@ -33,8 +34,6 @@ public class MainActivity extends BridgeActivity {
 }
 ```
 
-
-
 ```typescript
 import {Plugins} from "@capacitor/core";
 
@@ -48,9 +47,7 @@ const { BluetoothSerial } = Plugins;
 
 Interface and type definitions can be found [here](./src/definitions.ts).
 
-# API
-
-## Methods
+### Methods
 
 - [BluetoothSerial.isEnabled](#isEnabled)
 - [BluetoothSerial.enable](#enable)
@@ -190,6 +187,7 @@ Connect to a Bluetooth device.
 Function `connect` connects to a Bluetooth device.  The callback Success will be called when the connection is successful.  Failure is called if the connection fails.
 
 #### Android
+
 For Android, `connect` takes a MAC address of the remote device.
 
 ### Parameters
@@ -223,6 +221,7 @@ Function `connectInsecure` connects to a Bluetooth device.  The callback Success
 Function `connectInsecure` works like [BluetoothSerial.connect](#connect), but creates an insecure connection to a Bluetooth device. See the [Android docs](https://developer.android.com/reference/android/bluetooth/BluetoothDevice.html#createInsecureRfcommSocketToServiceRecord(java.util.UUID)) for more information.
 
 #### Android
+
 For Android, `connectInsecure` takes a MAC address of the remote device.
 
 ### Parameters
@@ -255,9 +254,10 @@ Disconnect a Bluetooth device.
 Function `disconnect` disconnects a Bluetooth device.  The callback Success will be called when the disconnection is successful.  Failure is called if the disconnection fails.
 
 #### Android
+
 For Android, `disconnect` takes a MAC address of the remote device.
 
-**Warning**: If no address is passed, all devices will be disconnected.
+__Warning__: If no address is passed, all devices will be disconnected.
 
 ### Parameters
 
@@ -289,6 +289,7 @@ Reports the connection status.
 Function `isConnected` calls the success callback with the connection status (connected or not connected). Failure will be called only if an error occurs.
 
 #### Android
+
 For Android, `isConnected` takes a MAC address of the remote device.
 
 ### Parameters
