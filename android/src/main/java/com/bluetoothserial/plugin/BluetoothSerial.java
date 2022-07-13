@@ -374,15 +374,26 @@ public class BluetoothSerial extends Plugin {
     private void enableBluetooth(PluginCall call) {
       if(!hasRequiredPermissions()) {
         requestPermissionForAliases(getPermissionAliases(), call, "checkPermission");
-        resolveEnableBluetooth(call, false);
-        return;
       }
-      if (isEnabled()) {
-        resolveEnableBluetooth(call, true);
-        return;
+      else if (isEnabled()) {
+          resolveEnableBluetooth(call, true);
+          return;
       }
+    }
 
-
+    @PermissionCallback
+    private void checkPermission(PluginCall call) {
+        Boolean permissionNotGranted = false;
+        for (String permissionAlias : getPermissionAliases()) {
+            if (getPermissionState(permissionAlias) != PermissionState.GRANTED) {
+                permissionNotGranted = true;
+            }
+        }
+        if (!permissionNotGranted) {
+            resolveEnableBluetooth(call, false);
+        } else {
+            call.reject("Permission is required to take a picture");
+        }
     }
 
     private void resolveEnableBluetooth(PluginCall call, boolean enabled) {

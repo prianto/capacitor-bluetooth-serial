@@ -10,34 +10,32 @@ Supported platforms
 
 ## Usage
 
-Install the plugin via npm
+### Prepare for github package usage
+
+Setup custom npm scope for @joseph2
 
 ```bash
-npm install --save capacitor-bluetooth-serial
+yarn config set -H npmScopes.joseph2.npmRegistryServer "https://npm.pkg.github.com"
 ```
 
-In your capacitor project, make sure to register the Android plugin in
-in the projects `MainActivity` as follows
+And set your personal github token for this scopes with read packages access. [Read more](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
-```java
-import com.bluetoothserial.plugin.BluetoothSerial;
-
-public class MainActivity extends BridgeActivity {
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
-      add(BluetoothSerial.class);
-    }});
-  }
-}
+```bash
+yarn config set -H npmScopes.joseph2.npmAuthToken "YOUR TOKEN"
 ```
+
+### Install
+
+Install the plugin via yarn
+
+```bash
+yarn add @joseph2/capacitor-bluetooth-serial
+```
+
+Import package in your code
 
 ```typescript
-import {Plugins} from "@capacitor/core";
-
-const { BluetoothSerial } = Plugins;
+import { BluetoothSerial } from "@joseph2/capacitor-bluetooth-serial"
 
 //...do something with plugin
 
