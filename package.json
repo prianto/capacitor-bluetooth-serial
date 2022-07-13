@@ -1,5 +1,5 @@
 {
-  "name": "capacitor-bluetooth-serial",
+  "name": "@joseph2/capacitor-bluetooth-serial",
   "version": "0.0.5",
   "description": "Capacitor Bluetooth Serial Plugin",
   "main": "dist/plugin.cjs.js",
@@ -69,9 +69,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/agro1desenvolvimento/capacitor-bluetooth-serial"
+    "url": "https://github.com/joseph2/capacitor-bluetooth-serial"
   },
   "bugs": {
-    "url": "https://github.com/agro1desenvolvimento/capacitor-bluetooth-serial/issues"
+    "url": "https://github.com/joseph2/capacitor-bluetooth-serial/issues"
   }
 }
