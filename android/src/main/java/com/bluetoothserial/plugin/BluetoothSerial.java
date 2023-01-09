@@ -150,6 +150,24 @@ public class BluetoothSerial extends Plugin {
         }
     }
 
+    @PluginMethod()
+    public void getPairedDevices(PluginCall call) {
+        if (rejectIfDisabled(call)) {
+          return;
+        }
+
+        try {
+            JSObject response = new JSObject();
+            Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+            JSArray devicesAsJson = BluetoothDeviceHelper.devicesToJSArray(devices);
+            response.put("devices", devicesAsJson);
+            resolveCall(call, response);
+        } catch (Exception e) {
+            Log.e(getLogTag(), "Error getting devices", e);
+            call.reject("Não foi possível obter o dispositivo", e);
+        }
+    }
+
     private void stopScan() {
         bluetoothAdapter.cancelDiscovery();
     }

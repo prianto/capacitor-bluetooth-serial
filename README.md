@@ -61,6 +61,7 @@ Interface and type definitions can be found [here](./src/definitions.ts).
 - [BluetoothSerial.enableRawNotifications](#enableRawNotifications)
 - [BluetoothSerial.disableRawNotifications](#disableRawNotifications)
 - [BluetoothSerial.write](#write)
+- [BluetoothSerial.getPairedDevices](#getPairedDevices)
 
 ## isEnabled
 
@@ -482,5 +483,51 @@ BluetoothSerial
   })
   .catch(() => {
     console.log('Error writing data to device');
+  });
+```
+## getPairedDevices
+
+Get a list of paired devices.
+
+  `getPairedDevices(): Promise<PairedDevicesResult>;`
+
+### Description
+
+#### Android
+
+Function `getPairedDevices` shows all paired devices. The success callback is called with a list of objects similar to `list`, or an empty list if no devices are found.
+
+Example list passed to success callback.
+
+```json
+[{
+    "class": 0,
+    "id": "00:11:22:33:44:55",
+    "address": "00:11:22:33:44:55",
+    "name": "Device 1"
+}, {
+    "class": 7936,
+    "id": "01:23:6645:4D67:89:00",
+    "address": "01:23:6645:4D67:89:00",
+    "name": "Device 2"
+}]
+```
+
+### Parameters
+
+None.
+
+### Quick Example
+
+```typescript
+BluetoothSerial
+  .getPairedDevices()
+  .then((result: PairedDevicesResult) => {
+    result.devices.forEach((device: BluetoothDevice) {
+        console.log(device.id);
+    });
+  })
+  .catch(() => {
+    console.log('Error getting devices');
   });
 ```

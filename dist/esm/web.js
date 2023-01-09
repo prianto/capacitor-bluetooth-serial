@@ -10,6 +10,9 @@ export class BluetoothSerialWeb extends WebPlugin {
     async scan() {
         throw new Error('Method not implemented.');
     }
+    async getPairedDevices() {
+        throw new Error('Method not implemented.');
+    }
     async connect(options) {
         if (!options) {
             return Promise.reject(new OptionsRequiredError());

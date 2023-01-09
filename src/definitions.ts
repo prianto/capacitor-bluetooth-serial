@@ -7,6 +7,8 @@ export interface BluetoothSerialPlugin extends Plugin {
 
   scan(): Promise<BluetoothScanResult>;
 
+  getPairedDevices(): Promise<PairedDevicesResult>;
+
   connect(options: BluetoothConnectOptions): Promise<void>;
 
   connectInsecure(options: BluetoothConnectOptions): Promise<void>;
@@ -32,6 +34,10 @@ export interface BluetoothEnabledResult {
 }
 
 export interface BluetoothScanResult {
+  devices: BluetoothDevice[];
+}
+
+export interface PairedDevicesResult {
   devices: BluetoothDevice[];
 }
 
